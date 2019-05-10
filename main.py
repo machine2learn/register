@@ -1,4 +1,5 @@
 import os
+import time
 
 from forms.new_user import RegisterForm
 from config.config import ConfigApp
@@ -34,6 +35,9 @@ def home():
 def register():
     form = RegisterForm()
     if request.method == 'POST':
+        print(config.database_uri())
+        for u in User.query.all():
+            print(u.username)
         password = randomStringwithDigits()
         new_user = User(username=form.email.data,
                         email=form.email.data,
@@ -41,14 +45,16 @@ def register():
         try:
             db.session.add(new_user)
             db.session.commit()
-            if check_user_exists(form.email.data, db):
-                recipient = form.email.data
-                msg = Message("EasyAI complete register - M2L", sender="tf3deep@gmail.com", recipients=[recipient])
-                msg.html = render_template('mail/register.html', username=form.email.data, password=password)
-                mail.send(msg)
-                return render_template("finish.html", mail=recipient, ezeeai_url=config.ezeeai_url())
-            else:
-                raise Exception
+            # time.sleep(5)
+            #
+            # if check_user_exists(form.email.data, db):
+            recipient = form.email.data
+            msg = Message("EasyAI complete register - M2L", sender="tf3deep@gmail.com", recipients=[recipient])
+            msg.html = render_template('mail/register.html', username=form.email.data, password=password)
+            mail.send(msg)
+            return render_template("finish.html", mail=recipient, ezeeai_url=config.ezeeai_url())
+            # else:
+            #     raise Exception
 
         except IntegrityError:
             return render_template("main.html", form=form, error='Email is already used. Check your inbox. ',
