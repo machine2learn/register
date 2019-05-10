@@ -13,7 +13,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 
 SECRET_KEY = os.urandom(32)
-
 app = Flask(__name__)
 config = ConfigApp()
 
