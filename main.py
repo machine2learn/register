@@ -42,10 +42,10 @@ def register():
         try:
             db.session.add(new_user)
             db.session.commit()
-            if check_user_exists(form.username.data, db):
-                recipient = "araceli@machine2learn.nl"  # form.email.data
+            if check_user_exists(form.email.data, db):
+                recipient = form.email.data
                 msg = Message("EasyAI complete register - M2L", sender="tf3deep@gmail.com", recipients=[recipient])
-                msg.html = render_template('mail/register.html', username=form.username.data, password=password)
+                msg.html = render_template('mail/register.html', username=form.email.data, password=password)
                 mail.send(msg)
                 return render_template("finish.html", mail=recipient)
             else:
