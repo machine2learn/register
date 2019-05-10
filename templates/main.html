@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Try EasyAI</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+</head>
+<body>
+<div class="cont">
+    <div class="form sign-in">
+        <div>
+            <img src="static/img/logotext-brain.png" alt="m2l">
+        </div>
+        <h4> EzeeAI <b>Register</b></h4>
+        <!--<p class="pgraph"> Introduce your name and email and we will send you and email with your credential to use it!</p>-->
+        <form id="form" method="POST" action="/register">
+            <label>
+                <span>Email</span>
+                <input id="email" name="email" required="" type="email">
+            </label>
+            <div class="error">
+                {{ error }}
+            </div>
+
+
+            <label>
+                <input id="consent" type="checkbox">
+                <div class="error" id="error_consent">
+                </div>
+                <span>  I consent to having this website store my
+            submitted information so they can respond to my inquiry.</span>
+
+            </label>
+            <button id="submit" type="button" class="submit" click="loader()"
+                    disabled>{{ form.submit }}</button>
+        </form>
+    </div>
+
+    <div class="sub-cont">
+        <div class="img">
+            <div class="img__text m--up">
+                <h2> EzeeAI </h2>
+                <p>Enter your name and email and we will send you an email with your credentials to use it!</p>
+            </div>
+            <div class="img__text m--in">
+                <h2>Still do not have your account?</h2>
+                <p>Just register. We've missed you!</p>
+            </div>
+            <div class="img__btn">
+                <span class="m--up">Login page</span>
+                <span class="m--in">Register </span>
+            </div>
+        </div>
+
+        <div class="mt-15">
+            <img src="static/img/ezeeai.png" alt="m2l">
+        </div>
+        <div class="center mt-3">
+            <a href="http://35.241.179.62:5000" class="mt-3"> Go to EzeeAI</a>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    document.querySelector('.img__btn').addEventListener('click', function () {
+        document.querySelector('.cont').classList.toggle('s-register');
+    });
+    $(document).ready(function () {
+        if ($('#consent').checked) {
+            $('#submit').prop('disabled', false);
+            $('#error_consent').text('');
+        }
+        $('#email').type = 'email';
+        $('#form').on('submit', function () {
+            if (!$('#consent').is(":checked")) {
+                $('#error_consent').text('Checkbox should be checked to submit');
+                return false;
+            }
+            $('#submit').val('Creating new user...')
+        });
+        $('#consent').change(function () {
+            if ($(this).is(":checked")) {
+                $('#submit').prop('disabled', false);
+                $('#error_consent').text('');
+            } else {
+                $('#submit').prop('disabled', true);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
