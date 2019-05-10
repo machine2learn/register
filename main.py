@@ -27,7 +27,7 @@ mail = Mail(app)
 @app.route("/")
 def home():
     form = RegisterForm()
-    return render_template("main.html", form=form, error='')
+    return render_template("main.html", form=form, error='', ezeeai_url=config.ezeeai_url())
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -46,16 +46,18 @@ def register():
                 msg = Message("EasyAI complete register - M2L", sender="tf3deep@gmail.com", recipients=[recipient])
                 msg.html = render_template('mail/register.html', username=form.email.data, password=password)
                 mail.send(msg)
-                return render_template("finish.html", mail=recipient)
+                return render_template("finish.html", mail=recipient, ezeeai_url=config.ezeeai_url())
             else:
                 raise Exception
 
         except IntegrityError:
-            return render_template("main.html", form=form, error='Email is already used. Check your inbox. ')
+            return render_template("main.html", form=form, error='Email is already used. Check your inbox. ',
+                                   ezeeai_url=config.ezeeai_url())
         except Exception:
-            return render_template("main.html", form=form, error='User not created. Please try again')
+            return render_template("main.html", form=form, error='User not created. Please try again',
+                                   ezeeai_url=config.ezeeai_url())
 
-    return render_template("finish.html", mail=None)
+    return render_template("finish.html", mail=None, ezeeai_url=config.ezeeai_url())
 
 
 if __name__ == "__main__":

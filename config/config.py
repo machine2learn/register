@@ -7,7 +7,7 @@ CONFIG_PATH = os.path.join(ROOT, 'config.ini')
 SQLALCHEMY = 'SQLALCHEMY'
 MAIL = 'MAIL'
 FLASK = 'FLASK'
-
+APP = 'APP'
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
@@ -53,7 +53,7 @@ class ConfigApp(object):
 
     def debug(self):
         if 'DEBUG' in os.environ:
-            return str2bool(s.environ['DEBUG'])
+            return str2bool(os.environ['DEBUG'])
         return str2bool(self.get(FLASK, 'DEBUG'))
 
     def threaded(self):
@@ -64,3 +64,8 @@ class ConfigApp(object):
 
     def port(self):
         return self.get(FLASK, 'PORT')
+
+    def ezeeai_url(self):
+        if 'EZEEAIURL' in os.environ:
+            return os.environ['EZEEAIURL']
+        return self.get(APP, 'EZEEAIURL')
