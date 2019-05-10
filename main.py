@@ -1,6 +1,6 @@
 import os
 
-from easyregister.forms.new_user import RegisterForm
+from forms.new_user import RegisterForm
 from config.config import ConfigApp
 from database.user import User
 from utils.util import randomStringwithDigits, check_user_exists
