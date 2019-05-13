@@ -6,6 +6,9 @@ from config.config import ConfigApp
 from database.user import User
 from utils.util import randomStringwithDigits, check_user_exists
 
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import *
+
 from sqlalchemy.exc import IntegrityError
 from flask import Flask, render_template, request
 from flask_mail import Mail, Message
@@ -39,27 +42,49 @@ def register():
         for u in User.query.all():
             print(u.username)
         password = randomStringwithDigits()
-        new_user = User(username=form.email.data,
-                        email=form.email.data,
+        new_user = User(username=form.email.data, email=form.email.data,
                         password=generate_password_hash(password, method='sha256'))
         try:
             db.session.add(new_user)
             db.session.commit()
-            # time.sleep(5)
-            #
-            # if check_user_exists(form.email.data, db):
-            recipient = form.email.data
-            msg = Message("EasyAI complete register - M2L", sender="tf3deep@gmail.com", recipients=[recipient])
-            msg.html = render_template('mail/register.html', username=form.email.data, password=password)
-            mail.send(msg)
-            return render_template("finish.html", mail=recipient, ezeeai_url=config.ezeeai_url())
-            # else:
-            #     raise Exception
+
+            message = {
+                'personalizations': [
+                    {
+                        'to': [
+                            {
+                                'email': form.email.data
+                            }
+                        ],
+                        'subject': 'EzeeAI Register Completed'
+                    }
+                ],
+                'from': {
+                    'email': config.mail_settings()['MAIL_USERNAME']
+                },
+                'content': [
+                    {
+                        'type': "text/html",
+                        'value': render_template('mail/register.html', username=form.email.data, password=password)
+                    }
+                ]
+            }
+
+            try:
+                sg = SendGridAPIClient(config.mail_sengrid_api_key())
+                response = sg.send(message)
+            except Exception as e:
+                print(e.message)
+                return render_template("main.html", form=form, error='User created but message can not be sent',
+                                       ezeeai_url=config.ezeeai_url())
+
+            return render_template("finish.html", mail=form.email.data, ezeeai_url=config.ezeeai_url())
 
         except IntegrityError:
             return render_template("main.html", form=form, error='Email is already used. Check your inbox. ',
                                    ezeeai_url=config.ezeeai_url())
         except Exception:
+            print(e.message)
             return render_template("main.html", form=form, error='User not created. Please try again',
                                    ezeeai_url=config.ezeeai_url())
 

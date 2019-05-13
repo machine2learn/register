@@ -9,6 +9,7 @@ MAIL = 'MAIL'
 FLASK = 'FLASK'
 APP = 'APP'
 
+
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
 
@@ -30,6 +31,11 @@ class ConfigApp(object):
             "MAIL_USERNAME": self.get(MAIL, 'USERNAME'),
             "MAIL_PASSWORD": self.get(MAIL, 'PASSWORD'),
         }
+
+    def mail_sengrid_api_key(self):
+        if 'SENDGRID_API_KEY' in os.environ:
+            return os.environ['SENDGRID_API_KEY']
+        return self.get(MAIL, 'SENDGRID_API_KEY')
 
     def database_uri(self):
         # CHECK ENVIROMENT VARIABLES
