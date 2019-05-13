@@ -66,7 +66,14 @@ class ConfigApp(object):
     def port(self):
         return self.get(FLASK, 'PORT')
 
+    def secret_key(self):
+        if 'SECRET_KEY' in os.environ:
+            return os.environ['SECRET_KEY']
+        return self.get(FLASK, 'SECRET_KEY')
+
     def ezeeai_url(self):
         if 'EZEEAIURL' in os.environ:
             return os.environ['EZEEAIURL']
         return self.get(APP, 'EZEEAIURL')
+
+

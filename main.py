@@ -15,13 +15,14 @@ from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.security import generate_password_hash
 
-SECRET_KEY = os.urandom(32)
+
 app = Flask(__name__)
 config = ConfigApp()
+SECRET_KEY = config.secret_key()
 
 # app.config.update(config.mail_settings())
 app.config['SQLALCHEMY_DATABASE_URI'] = config.database_uri()
-app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = config.secret_key()
 
 db = SQLAlchemy(app)
 mail = Mail(app)
