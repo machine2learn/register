@@ -22,15 +22,10 @@ class ConfigApp(object):
     def get(self, section, param):
         return self.config.get(section, param)
 
-    def mail_settings(self):
-        return {
-            "MAIL_SERVER": self.get(MAIL, 'MAIL_SERVER'),
-            "MAIL_PORT": self.get(MAIL, 'PORT'),
-            "MAIL_USE_TLS": False,
-            "MAIL_USE_SSL": True,
-            "MAIL_USERNAME": self.get(MAIL, 'USERNAME'),
-            "MAIL_PASSWORD": self.get(MAIL, 'PASSWORD'),
-        }
+    def mail_from(self):
+        if 'MAIL_USER' in os.environ:
+            return os.environ['MAIL_FROM']
+        return self.get(MAIL, 'MAIL_FROM')
 
     def mail_sengrid_api_key(self):
         if 'SENDGRID_API_KEY' in os.environ:

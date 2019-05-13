@@ -4,7 +4,7 @@ import time
 from forms.new_user import RegisterForm
 from config.config import ConfigApp
 from database.user import User
-from utils.util import randomStringwithDigits, check_user_exists
+from utils.util import randomStringwithDigits, create_mail
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
@@ -48,27 +48,10 @@ def register():
             db.session.add(new_user)
             db.session.commit()
 
-            message = {
-                'personalizations': [
-                    {
-                        'to': [
-                            {
-                                'email': form.email.data
-                            }
-                        ],
-                        'subject': 'EzeeAI Register Completed'
-                    }
-                ],
-                'from': {
-                    'email': config.mail_settings()['MAIL_USERNAME']
-                },
-                'content': [
-                    {
-                        'type': "text/html",
-                        'value': render_template('mail/register.html', username=form.email.data, password=password)
-                    }
-                ]
-            }
+            mail_to = form.email.data
+            mail_from = config.mail_from()
+            content = render_template('mail/register.html', username=form.email.data, password=password)
+            message = create_mail(mail_to, mail_from, content)
 
             try:
                 sg = SendGridAPIClient(config.mail_sengrid_api_key())
