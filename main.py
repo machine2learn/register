@@ -11,7 +11,6 @@ from sendgrid.helpers.mail import *
 
 from sqlalchemy.exc import IntegrityError
 from flask import Flask, render_template, request
-from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.security import generate_password_hash
@@ -20,7 +19,7 @@ SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
 config = ConfigApp()
 
-app.config.update(config.mail_settings())
+# app.config.update(config.mail_settings())
 app.config['SQLALCHEMY_DATABASE_URI'] = config.database_uri()
 app.config['SECRET_KEY'] = SECRET_KEY
 
