@@ -38,18 +38,24 @@
                 </div>
             </div>
 
-
             <button id="submit" type="button" class="submit" click="loader()"
                     disabled>{{ form.submit }}</button>
         </form>
+
+
     </div>
 
     <div class="sub-cont">
         <div class="img">
             <div class="img__text m--up">
                 <h2> EzeeAI </h2>
-                <p>Enter your name and email and we will send you an email with your credentials to use it!</p>
-                <a class="button" href="{{ ezeeai_url }}"> Login page</a>
+
+                <p>Enter your email and we will send you an email with your credentials to use it!</p>
+
+                <a class="button m-t-10" href="{{ ezeeai_url }}"> Login page</a>
+                <a class="button" onclick="loadPage()"> Tutorial</a>
+
+
             </div>
 
         </div>
@@ -58,6 +64,10 @@
 </div>
 
 <script>
+    function loadPage() {
+        window.location = "static/tutorial/EasyAI_tutorial.html";
+    }
+
     $(document).ready(function () {
         if ($('#consent').checked) {
             $('#submit').prop('disabled', false);
@@ -79,6 +89,8 @@
                 $('#submit').prop('disabled', true);
             }
         });
+
+
     });
 </script>
 

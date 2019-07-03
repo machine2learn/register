@@ -365,7 +365,7 @@ h4 {
   clear: both;
 }
 .button {
-    margin-top:20vh;
+    margin-top:2vh;
     margin-left:5vh;
     display: block;
     width: 115px;
@@ -377,5 +377,8 @@ h4 {
     border: solid 2px #00b6e1;
     color: #00b6e1;
     text-decoration: none;
-
+    cursor: pointer!important;
+}
+.m-t-10{
+     margin-top:10vh!important;
 }
